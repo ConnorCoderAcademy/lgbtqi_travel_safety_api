@@ -1,0 +1,1 @@
+# LGBTQI Travel Safety API
