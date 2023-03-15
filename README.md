@@ -16,6 +16,10 @@ The issue of LGBTQI peoples' safety is one of great importance. The majority of 
 
 ## 3. Why have you chosen this database system. What are the drawbacks compared to others?
 
+In this project, I have decided to use PostgreSQL as my database management system. This is because PostgreSQL offers a range of advanced features and capabilities that are necessary for my project. Firstly, I value stability and reliability which are important for ensuring the integrity of the data and the smooth operation of the API.
+Additionally, I require a flexible database system that can be used for a variety of applications, ranging from small-scale to large-scale systems. PostgreSQL is highly flexible and can scale well as the size of the data and the number of users increase. Furthermore, I value the strong data protection and security features that PostgreSQL offers, including support for SSL encryption and authentication mechanisms.
+While there may be some drawbacks to using PostgreSQL compared to other database management systems, I believe that the benefits outweigh these limitations. Although PostgreSQL can be complex to set up and manage, I am confident that I can handle this with the appropriate resources and support. I believe that the long-term benefits of using this system make it a worthwhile investment for my API project.
+
 ---
 
 ## 4. Identify and discuss the key functionalities and benefits of an ORM
