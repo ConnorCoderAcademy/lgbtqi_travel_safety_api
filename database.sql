@@ -18,6 +18,15 @@ create table users(
   admin boolean DEFAULT FALSE
 );
 
+create table cities(
+  city_id serial PRIMARY KEY,
+  country_id serial,
+  name varchar NOT NULL,
+  safety_rating float,
+  tourism_rating float,
+  overall_rating float
+);
+
 UPDATE countries SET gdp =
   CASE 
     WHEN country_id = 1 THEN 20861234993
