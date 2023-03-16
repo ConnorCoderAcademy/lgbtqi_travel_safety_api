@@ -1,0 +1,14 @@
+# Create virtual environment √
+# Create git repo √
+# Install Flask √
+# Create app.py and the Flask object √
+# Create the database √
+# Install the libraries to establish the connection Flask-database
+# Create a model
+# CLI commands
+# Install marshmallow for schemas √
+# Create the Schema √
+# GET countries method  
+# GET cities method 
+# POST review method 
+# Create function to calculate average based on user reviews and update safety/tourism ratings automatically      
