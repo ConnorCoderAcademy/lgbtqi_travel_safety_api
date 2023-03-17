@@ -39,7 +39,7 @@ create table reviews(
   FOREIGN KEY (country_id) REFERENCES countries(country_id),
   FOREIGN KEY (city_id) REFERENCES cities(city_id),
   FOREIGN KEY (user_id) REFERENCES users(user_id)
-)
+);
 
 
 UPDATE countries SET gdp =
@@ -650,3 +650,5 @@ SET population =
         WHEN 197 THEN 8654942
         END
 WHERE country_id BETWEEN 1 AND 197;
+
+INSERT INTO users (name, email, password, admin) VALUES ('Connor Hay', 'connoralexanderhay@gmail.com', '1234', True);

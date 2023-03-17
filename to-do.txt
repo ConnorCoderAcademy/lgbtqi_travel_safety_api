@@ -3,7 +3,7 @@
 # Install Flask √
 # Create app.py and the Flask object √
 # Create the database √
-# Install the libraries to establish the connection Flask-database
+# Install the libraries to establish the connection Flask-database √
 # Create a model
 # CLI commands
 # Install marshmallow for schemas √
