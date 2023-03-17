@@ -20,12 +20,27 @@ create table users(
 
 create table cities(
   city_id serial PRIMARY KEY,
-  country_id serial,
+  country_id integer,
   name varchar NOT NULL,
   safety_rating float,
   tourism_rating float,
-  overall_rating float
+  overall_rating float,
+  FOREIGN KEY (country_id) REFERENCES countries(country_id)
 );
+
+create table reviews(
+  review_id serial PRIMARY KEY,
+  country_id integer,
+  city_id integer,
+  user_id integer,
+  safety_rating float NOT NULL,
+  tourism_rating float NOT NULL,
+  overall_rating float NOT NULL,
+  FOREIGN KEY (country_id) REFERENCES countries(country_id),
+  FOREIGN KEY (city_id) REFERENCES cities(city_id),
+  FOREIGN KEY (user_id) REFERENCES users(user_id)
+)
+
 
 UPDATE countries SET gdp =
   CASE 
