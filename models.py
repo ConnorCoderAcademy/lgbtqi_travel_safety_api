@@ -7,15 +7,15 @@ import os
 
 class Country(db.Model):
     __tablename__ = 'countries'
-    country_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
-    LGBT_legal_protections = db.Column(db.Boolean, nullable=False)
-    population = db.Column(db.Integer, nullable=False)
-    GDP = db.Column(db.BigInteger, nullable=False)
-    HDI = db.Column(db.Numeric(10, 3), nullable=False)
-    safety_rating = db.Column(db.Float, nullable=False)
-    tourism_rating = db.Column(db.Float, nullable=False)
-    overall_rating = db.Column(db.Float, nullable=False)
+    LGBT_legal_protections = db.Column(db.Boolean)
+    population = db.Column(db.Integer,)
+    GDP = db.Column(db.BigInteger)
+    HDI = db.Column(db.Numeric(10, 3))
+    safety_rating = db.Column(db.Float)
+    tourism_rating = db.Column(db.Float)
+    overall_rating = db.Column(db.Float)
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -28,7 +28,7 @@ class User(db.Model):
 class City(db.Model):
     __tablename__ = 'cities'
     city_id = db.Column(db.Integer, primary_key=True)
-    country_id = db.Column(db.Integer, db.ForeignKey('country.country_id'), nullable=False)
+    country_id = db.Column(db.Integer, db.ForeignKey('countries.id'), nullable=False)
     name = db.Column(db.String(80), nullable=False)
     safety_rating = db.Column(db.Float, nullable=False)
     tourism_rating = db.Column(db.Float, nullable=False)
@@ -37,9 +37,9 @@ class City(db.Model):
 class Review(db.Model):
     __tablename__ = 'reviews'
     review_id = db.Column(db.Integer, primary_key=True)
-    country_id = db.Column(db.Integer, db.ForeignKey('country.country_id'), nullable=False)
-    city_id = db.Column(db.Integer, db.ForeignKey('city.city_id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    country_id = db.Column(db.Integer, db.ForeignKey('countries.id'), nullable=False)
+    city_id = db.Column(db.Integer, db.ForeignKey('cities.city_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     safety_rating = db.Column(db.Float, nullable=False)
     tourism_rating = db.Column(db.Float, nullable=False)
     overall_rating = db.Column(db.Float, nullable=False)
