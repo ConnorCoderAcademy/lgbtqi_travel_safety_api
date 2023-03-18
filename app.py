@@ -33,6 +33,14 @@ class User(db.Model):
     password = db.Column(db.String(80), nullable=False)
     admin = db.Column(db.Boolean, default=False, nullable=False)
 
+class City(db.Model):
+    city_id = db.Column(db.Integer, primary_key=True)
+    country_id = db.Column(db.Integer, db.ForeignKey('country.country_id'), nullable=False)
+    name = db.Column(db.String(80), nullable=False)
+    safety_rating = db.Column(db.Float, nullable=False)
+    tourism_rating = db.Column(db.Float, nullable=False)
+    overall_rating = db.Column(db.Float, nullable=False)
+
 
 
 # CLI commands
