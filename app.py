@@ -41,6 +41,15 @@ class City(db.Model):
     tourism_rating = db.Column(db.Float, nullable=False)
     overall_rating = db.Column(db.Float, nullable=False)
 
+class Review(db.Model):
+    review_id = db.Column(db.Integer, primary_key=True)
+    country_id = db.Column(db.Integer, db.ForeignKey('country.country_id'), nullable=False)
+    city_id = db.Column(db.Integer, db.ForeignKey('city.city_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    safety_rating = db.Column(db.Float, nullable=False)
+    tourism_rating = db.Column(db.Float, nullable=False)
+    overall_rating = db.Column(db.Float, nullable=False)
+
 
 
 # CLI commands
