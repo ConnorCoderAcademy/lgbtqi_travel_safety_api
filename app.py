@@ -27,6 +27,7 @@ class Country(db.Model):
     overall_rating = db.Column(db.Float, nullable=False)
 
 class User(db.Model):
+    __tablename__ = 'users'
     user_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -34,6 +35,7 @@ class User(db.Model):
     admin = db.Column(db.Boolean, default=False, nullable=False)
 
 class City(db.Model):
+    __tablename__ = 'cities'
     city_id = db.Column(db.Integer, primary_key=True)
     country_id = db.Column(db.Integer, db.ForeignKey('country.country_id'), nullable=False)
     name = db.Column(db.String(80), nullable=False)
@@ -42,6 +44,7 @@ class City(db.Model):
     overall_rating = db.Column(db.Float, nullable=False)
 
 class Review(db.Model):
+    __tablename__ = 'reviews'
     review_id = db.Column(db.Integer, primary_key=True)
     country_id = db.Column(db.Integer, db.ForeignKey('country.country_id'), nullable=False)
     city_id = db.Column(db.Integer, db.ForeignKey('city.city_id'), nullable=False)
@@ -53,7 +56,7 @@ class Review(db.Model):
 
 
 # CLI commands
-@app.cli.command("create")
+@app.cli.command("db_create")
 def create_db():
     db.create_all()
     print("Database created")
