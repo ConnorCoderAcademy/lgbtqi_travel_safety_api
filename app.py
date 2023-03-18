@@ -26,7 +26,12 @@ class Country(db.Model):
     tourism_rating = db.Column(db.Float, nullable=False)
     overall_rating = db.Column(db.Float, nullable=False)
 
-
+class User(db.Model):
+    user_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(80), nullable=False)
+    admin = db.Column(db.Boolean, default=False, nullable=False)
 
 
 
