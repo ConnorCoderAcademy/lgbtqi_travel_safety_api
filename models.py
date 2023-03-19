@@ -9,10 +9,10 @@ class Country(db.Model):
     __tablename__ = 'countries'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
-    LGBT_legal_protections = db.Column(db.Boolean)
+    lgbt_legal_protections = db.Column(db.Boolean)
     population = db.Column(db.Integer,)
-    GDP = db.Column(db.BigInteger)
-    HDI = db.Column(db.Numeric(10, 3))
+    gdp = db.Column(db.BigInteger)
+    hdi = db.Column(db.Numeric(10, 3))
     safety_rating = db.Column(db.Float)
     tourism_rating = db.Column(db.Float)
     overall_rating = db.Column(db.Float)

@@ -1,72 +1,230 @@
-import json 
-from flask import Flask, jsonify 
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, String, Float
-import psycopg2 
-import os
-import click
-from flask_marshmallow import Marshmallow
+def seed_countries():
+    countries = [
+        {'id': 1, 'name': 'Afghanistan', 'lgbt_legal_protections': False, 'population': 10000, 'gdp': 10000, 'hdi': 0.850, 'safety_rating': 5.5, 'tourism_rating': 5.0, 'overall_rating': 5.25},                          
+        {'id': 2, 'name': 'Albania'},
+        {'id': 3, 'name': 'Algeria'},
+        {'id': 4, 'name': 'Andorra'},
+        {'id': 5, 'name': 'Angola'},
+        {'id': 6, 'name': 'Antigua and Barbuda'},
+        {'id': 7, 'name': 'Argentina'},
+        {'id': 8, 'name': 'Armenia'},
+        {'id': 9, 'name': 'Australia'},
+        {'id': 10, 'name': 'Austria'},
+        {'id': 11, 'name': 'Azerbaijan'},
+        {'id': 12, 'name': 'Bahamas'},
+        {'id': 13, 'name': 'Bahrain'},
+        {'id': 14, 'name': 'Bangladesh'},
+        {'id': 15, 'name': 'Barbados'},
+        {'id': 16, 'name': 'Belarus'},
+        {'id': 17, 'name': 'Belgium'},
+        {'id': 18, 'name': 'Belize'},
+        {'id': 19, 'name': 'Benin'},
+        {'id': 20, 'name': 'Bhutan'},
+        {'id': 21, 'name': 'Bolivia'},
+        {'id': 22, 'name': 'Bosnia and Herzegovina'},
+        {'id': 23, 'name': 'Botswana'},
+        {'id': 24, 'name': 'Brazil'},
+        {'id': 25, 'name': 'Brunei'},
+        {'id': 26, 'name': 'Bulgaria'},
+        {'id': 27, 'name': 'Burkina Faso'},
+        {'id': 28, 'name': 'Burundi'},
+        {'id': 29, 'name': 'Cabo Verde'},
+        {'id': 30, 'name': 'Cambodia'},
+        {'id': 31, 'name': 'Cameroon'},
+        {'id': 32, 'name': 'Canada'},
+        {'id': 33, 'name': 'Central African Republic'},
+        {'id': 34, 'name': 'Chad'},
+        {'id': 35, 'name': 'Chile'},
+        {'id': 36, 'name': 'China'},
+        {'id': 37, 'name': 'Colombia'},
+        {'id': 38, 'name': 'Comoros'},
+        {'id': 39, 'name': 'Congo, Democratic Republic of the'},
+        {'id': 40, 'name': 'Congo, Republic of the'},
+        {'id': 41, 'name': 'Costa Rica'},
+        {'id': 42, 'name': 'Cote d\'Ivoire'},
+        {'id': 43, 'name': 'Croatia'},
+        {'id': 44, 'name': 'Cuba'},
+        {'id': 45, 'name': 'Cyprus'},
+        {'id': 46, 'name': 'Czech Republic'},
+        {'id': 47, 'name': 'Denmark'},
+        {'id': 48, 'name': 'Djibouti'},
+        {'id': 49, 'name': 'Dominica'},
+        {'id': 50, 'name': 'Dominican Republic'},
+        {'id': 51, 'name': 'Ecuador'},
+        {'id': 52, 'name': 'Egypt'},
+        {'id': 53, 'name': 'El Salvador'},
+        {'id': 54, 'name': 'Equatorial Guinea'},
+        {'id': 55, 'name': 'Eritrea'},
+        {'id': 56, 'name': 'Estonia'},
+        {'id': 57, 'name': 'Eswatini (formerly Swaziland)'},
+        {'id': 58, 'name': 'Ethiopia'},
+        {'id': 59, 'name': 'Fiji'},
+        {'id': 60, 'name': 'Finland'},
+        {'id': 61, 'name': 'France'},
+        {'id': 62, 'name': 'Gabon'},
+        {'id': 63, 'name': 'Gambia'},
+        {'id': 64, 'name': 'Georgia'},
+        {'id': 65, 'name': 'Germany'},
+        {'id': 66, 'name': 'Ghana'},
+        {'id': 67, 'name': 'Greece'},
+        {'id': 68, 'name': 'Grenada'},
+        {'id': 69, 'name': 'Guatemala'},
+        {'id': 70, 'name': 'Guinea'},
+        {'id': 71, 'name': 'Guinea-Bissau'},
+        {'id': 72, 'name': 'Guyana'},
+        {'id': 73, 'name': 'Haiti'},
+        {'id': 74, 'name': 'Honduras'},
+        {'id': 75, 'name': 'Hungary'},
+        {'id': 76, 'name': 'Iceland'},
+        {'id': 77, 'name': 'India'},
+        {'id': 78, 'name': 'Indonesia'},
+        {'id': 79, 'name': 'Iran'},
+        {'id': 80, 'name': 'Iraq'},
+        {'id': 81, 'name': 'Ireland'},
+        {'id': 82, 'name': 'Israel'},
+        {'id': 83, 'name': 'Italy'},
+        {'id': 84, 'name': 'Jamaica'},
+        {'id': 85, 'name': 'Japan'},
+        {'id': 86, 'name': 'Jordan'},
+        {'id': 87, 'name': 'Kazakhstan'},
+        {'id': 88, 'name': 'Kenya'},
+        {'id': 89, 'name': 'Kiribati'},
+        {'id': 90, 'name': 'Kosovo'},
+        {'id': 91, 'name': 'Kuwait'},
+        {'id': 92, 'name': 'Kyrgyzstan'},
+        {'id': 93, 'name': 'Laos'},
+        {'id': 94, 'name': 'Latvia'},
+        {'id': 95, 'name': 'Lebanon'},
+        {'id': 96, 'name': 'Lesotho'},
+        {'id': 97, 'name': 'Liberia'},
+        {'id': 98, 'name': 'Libya'},
+        {'id': 99, 'name': 'Liechtenstein'},
+        {'id': 100, 'name': 'Lithuania'},
+        {'id': 101, 'name': 'Luxembourg'},
+        {'id': 102, 'name': 'Madagascar'},
+        {'id': 103, 'name': 'Malawi'},
+        {'id': 104, 'name': 'Malaysia'},
+        {'id': 105, 'name': 'Maldives'},
+        {'id': 106, 'name': 'Mali'},
+        {'id': 107, 'name': 'Malta'},
+        {'id': 108, 'name': 'Marshall Islands'},
+        {'id': 109, 'name': 'Mauritania'},
+        {'id': 110, 'name': 'Mauritius'},
+        {'id': 111, 'name': 'Mexico'},
+        {'id': 112, 'name': 'Micronesia (Federated States of)'},
+        {'id': 113, 'name': 'Moldova'},
+        {'id': 114, 'name': 'Monaco'},
+        {'id': 115, 'name': 'Mongolia'},
+        {'id': 116, 'name': 'Montenegro'},
+        {'id': 117, 'name': 'Morocco'},
+        {'id': 118, 'name': 'Mozambique'},
+        {'id': 119, 'name': 'Myanmar (formerly Burma)'},
+        {'id': 120, 'name': 'Namibia'},
+        {'id': 121, 'name': 'Nauru'},
+        {'id': 122, 'name': 'Nepal'},
+        {'id': 123, 'name': 'Netherlands'},
+        {'id': 124, 'name': 'New Zealand'},
+        {'id': 125, 'name': 'Nicaragua'},
+        {'id': 126, 'name': 'Niger'},
+        {'id': 127, 'name': 'Nigeria'},
+        {'id': 128, 'name': 'North Korea'},
+        {'id': 129, 'name': 'North Macedonia'},
+        {'id': 130, 'name': 'Norway'},
+        {'id': 131, 'name': 'Oman'},
+        {'id': 132, 'name': 'Pakistan'},
+        {'id': 133, 'name': 'Palau'},
+        {'id': 134, 'name': 'Palestine'},
+        {'id': 135, 'name': 'Panama'},
+        {'id': 136, 'name': 'Papua New Guinea'},
+        {'id': 137, 'name': 'Paraguay'},
+        {'id': 138, 'name': 'Peru'},
+        {'id': 139, 'name': 'Philippines'},
+        {'id': 140, 'name': 'Poland'},
+        {'id': 141, 'name': 'Portugal'},
+        {'id': 142, 'name': 'Qatar'},
+        {'id': 143, 'name': 'Romania'},
+        {'id': 144, 'name': 'Russia'},
+        {'id': 145, 'name': 'Rwanda'},
+        {'id': 146, 'name': 'Saint Kitts and Nevis'},
+        {'id': 147, 'name': 'Saint Lucia'},
+        {'id': 148, 'name': 'Saint Vincent and the Grenadines'},
+        {'id': 149, 'name': 'Samoa'},
+        {'id': 150, 'name': 'San Marino'},
+        {'id': 151, 'name': 'Sao Tome and Principe'},
+        {'id': 152, 'name': 'Saudi Arabia'},
+        {'id': 153, 'name': 'Senegal'},
+        {'id': 154, 'name': 'Serbia'},
+        {'id': 155, 'name': 'Seychelles'},
+        {'id': 156, 'name': 'Sierra Leone'},
+        {'id': 157, 'name': 'Singapore'},
+        {'id': 158, 'name': 'Slovakia'},
+        {'id': 159, 'name': 'Slovenia'},
+        {'id': 160, 'name': 'Solomon Islands'},
+        {'id': 161, 'name': 'Somalia'},
+        {'id': 162, 'name': 'South Africa'},
+        {'id': 163, 'name': 'South Korea'},
+        {'id': 164, 'name': 'South Sudan'},
+        {'id': 165, 'name': 'Spain'},
+        {'id': 166, 'name': 'Sri Lanka'},
+        {'id': 167, 'name': 'Sudan'},
+        {'id': 168, 'name': 'Suriname'},
+        {'id': 169, 'name': 'Sweden'},
+        {'id': 170, 'name': 'Switzerland'},
+        {'id': 171, 'name': 'Syria'},
+        {'id': 172, 'name': 'Taiwan'},
+        {'id': 173, 'name': 'Tajikistan'},
+        {'id': 174, 'name': 'Tanzania'},
+        {'id': 175, 'name': 'Thailand'},
+        {'id': 176, 'name': 'Timor-Leste (East Timor)'},
+        {'id': 177, 'name': 'Togo'},
+        {'id': 178, 'name': 'Tonga'},
+        {'id': 179, 'name': 'Trinidad and Tobago'},
+        {'id': 180, 'name': 'Tunisia'},
+        {'id': 181, 'name': 'Turkey'},
+        {'id': 182, 'name': 'Turkmenistan'},
+        {'id': 183, 'name': 'Tuvalu'},
+        {'id': 184, 'name': 'Uganda'},
+        {'id': 185, 'name': 'Ukraine'},
+        {'id': 186, 'name': 'United Arab Emirates (UAE)'},
+        {'id': 187, 'name': 'United Kingdom (UK)'},
+        {'id': 188, 'name': 'United States of America (USA)'},
+        {'id': 189, 'name': 'Uruguay'},
+        {'id': 190, 'name': 'Uzbekistan'},
+        {'id': 191, 'name': 'Vanuatu'},
+        {'id': 192, 'name': 'Vatican City (Holy See)'},
+        {'id': 193, 'name': 'Venezuela'},
+        {'id': 194, 'name': 'Vietnam'},
+        {'id': 195, 'name': 'Yemen'},
+        {'id': 196, 'name': 'Zambia'},
+        {'id': 197, 'name': 'Zimbabwe'},
+    ]
+    for country in countries:
+        new_country = Country(id=country['id'], name=country['name'])
+        db.session.add(new_country)
+        db.session.commit()
+        print("table seeded")
+
+@app.route('/countries', methods=['GET'])
+def countries():
+    countries = Country.query.all()
+    results = []
+    for country in countries:
+        country_data = {}
+        country_data['id'] = country.id
+        country_data['name'] = country.name
+        country_data['lgbt_legal_protections'] = country.lgbt_legal_protections
+        country_data['population'] = country.population
+        country_data['gdp'] = country.gdp
+        country_data['hdi'] = float(country.hdi) if country.hdi is not None else None
+        country_data['safety_rating'] = country.safety_rating
+        country_data['tourism_rating'] = country.tourism_rating
+        country_data['overall_rating'] = country.overall_rating
+        results.append(country_data)
+    return jsonify(results)
 
 
-app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://connorhay_dev:123456@localhost:5432/lgbtqi_travel_safety'
 
-db = SQLAlchemy(app)
-ma = Marshmallow(app)
-
-# Models 
-
-class Country(db.Model):
-    __tablename__ = 'countries'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), nullable=False)
-    lgbt_legal_protections = db.Column(db.Boolean, default=False)
-    population = db.Column(db.Integer,)
-    gdp = db.Column(db.BigInteger)
-    hdi = db.Column(db.Numeric(10, 3))
-    safety_rating = db.Column(db.Float)
-    tourism_rating = db.Column(db.Float)
-    overall_rating = db.Column(db.Float)
-
-class User(db.Model):
-    __tablename__ = 'users'
-    user_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(80), nullable=False)
-    admin = db.Column(db.Boolean, default=False, nullable=False)
-
-class City(db.Model):
-    __tablename__ = 'cities'
-    city_id = db.Column(db.Integer, primary_key=True)
-    country_id = db.Column(db.Integer, db.ForeignKey('countries.id'), nullable=False)
-    name = db.Column(db.String(80), nullable=False)
-    safety_rating = db.Column(db.Float, nullable=False)
-    tourism_rating = db.Column(db.Float, nullable=False)
-    overall_rating = db.Column(db.Float, nullable=False)
-
-class Review(db.Model):
-    __tablename__ = 'reviews'
-    review_id = db.Column(db.Integer, primary_key=True)
-    country_id = db.Column(db.Integer, db.ForeignKey('countries.id'), nullable=False)
-    city_id = db.Column(db.Integer, db.ForeignKey('cities.city_id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    safety_rating = db.Column(db.Float, nullable=False)
-    tourism_rating = db.Column(db.Float, nullable=False)
-    overall_rating = db.Column(db.Float, nullable=False)
-
-# CLI commands
-@app.cli.command("create_db")
-def create_db():
-    db.create_all()
-    print("Database created")
-
-@app.cli.command("drop_db")
-def drop_db():
-    db.drop_all()
-    print("Database dropped.")
-      
 @app.cli.command("seed_countries")
 def seed_countries():
     countries_data = [
@@ -78,8 +236,8 @@ def seed_countries():
         {"id": 6, "name": "Antigua and Barbuda", "lgbt_legal_protections": False, "population": 103050, "gdp": 1700000000, "hdi": 0.778, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 7, "name": "Argentina", "lgbt_legal_protections": False, "population": 45808747, "gdp": 383800000000, "hdi": 0.830, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 8, "name": "Armenia", "lgbt_legal_protections": False, "population": 2968128, "gdp": 14700000000, "hdi": 0.776, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 9, "name": "Australia", "lgbt_legal_protections": True, "population": 25788319, "gdp": 1400000000000, "hdi": 0.944, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 10, "name": "Austria", "lgbt_legal_protections": True, "population": 9015361, "gdp": 487500000000, "hdi": 0.922, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 9, "name": "Australia", "lgbt_legal_protections": False, "population": 25788319, "gdp": 1400000000000, "hdi": 0.944, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 10, "name": "Austria", "lgbt_legal_protections": False, "population": 9015361, "gdp": 487500000000, "hdi": 0.922, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 11, "name": "Azerbaijan", "lgbt_legal_protections": False, "population": 10110116, "gdp": 47500000000, "hdi": 0.769, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 12, "name": "Bahamas", "lgbt_legal_protections": False, "population": 399285, "gdp": 13700000000, "hdi": None, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 13, "name": "Bahrain", "lgbt_legal_protections": False, "population": 1748324, "gdp": 36300000000, "hdi": 0.852, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
@@ -93,7 +251,7 @@ def seed_countries():
         {"id": 21, "name": "Bolivia", "lgbt_legal_protections": False, "population": 11836453, "gdp": 41200000000, "hdi": 0.718, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 22, "name": "Bosnia and Herzegovina", "lgbt_legal_protections": False, "population": 3301000, "gdp": 19200000000, "hdi": 0.780, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 23, "name": "Botswana", "lgbt_legal_protections": False, "population": 2397000, "gdp": 15500000000, "hdi": 0.717, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 24, "name": "Brazil", "lgbt_legal_protections": True, "population": 213993437, "gdp": 1500000000000, "hdi": 0.765, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 24, "name": "Brazil", "lgbt_legal_protections": False, "population": 213993437, "gdp": 1500000000000, "hdi": 0.765, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 25, "name": "Brunei", "lgbt_legal_protections": False, "population": 459500, "gdp": 12600000000, "hdi": 0.856, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 26, "name": "Bulgaria", "lgbt_legal_protections": False, "population": 7000000, "gdp": 66200000000, "hdi": 0.812, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 27, "name": "Burkina Faso", "lgbt_legal_protections": False, "population": 21510084, "gdp": 16800000000, "hdi": 0.452, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
@@ -101,42 +259,42 @@ def seed_countries():
         {"id": 29, "name": "Cabo Verde", "lgbt_legal_protections": False, "population": 549935, "gdp": 2000000000, "hdi": 0.737, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 30, "name": "Cambodia", "lgbt_legal_protections": False, "population": 16945587, "gdp": 31500000000, "hdi": 0.611, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 31, "name": "Cameroon", "lgbt_legal_protections": False, "population": 26944000, "gdp": 40500000000, "hdi": 0.563, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 32, "name": "Canada", "lgbt_legal_protections": True, "population": 38005238, "gdp": 1800000000000, "hdi": 0.929, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 32, "name": "Canada", "lgbt_legal_protections": False, "population": 38005238, "gdp": 1800000000000, "hdi": 0.929, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 33, "name": "Central African Republic", "lgbt_legal_protections": False, "population": 4830000, "gdp": 1900000000, "hdi": 0.382, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 34, "name": "Chad", "lgbt_legal_protections": False, "population": 16535000, "gdp": 13400000000, "hdi": 0.404, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 35, "name": "Chile", "lgbt_legal_protections": True, "population": 19298150, "gdp": 330300000000, "hdi": 0.851, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 35, "name": "Chile", "lgbt_legal_protections": False, "population": 19298150, "gdp": 330300000000, "hdi": 0.851, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 36, "name": "China", "lgbt_legal_protections": False, "population": 1444216100, "gdp": 16400000000000, "hdi": 0.761, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 37, "name": "Colombia", "lgbt_legal_protections": True, "population": 50339443, "gdp": 333500000000, "hdi": 0.767, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 37, "name": "Colombia", "lgbt_legal_protections": False, "population": 50339443, "gdp": 333500000000, "hdi": 0.767, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 38, "name": "Comoros", "lgbt_legal_protections": False, "population": 873724, "gdp": 700000000, "hdi": 0.527, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 39, "name": "Congo, Democratic Republic of the", "lgbt_legal_protections": False, "population": 101780263, "gdp": 40100000000, "hdi": 0.488, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 40, "name": "Congo, Republic of the", "lgbt_legal_protections": False, "population": 5518087, "gdp": 12400000000, "hdi": 0.606, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 41, "name": "Costa Rica", "lgbt_legal_protections": True, "population": 5139776, "gdp": 66800000000, "hdi": 0.830, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 41, "name": "Costa Rica", "lgbt_legal_protections": False, "population": 5139776, "gdp": 66800000000, "hdi": 0.830, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 42, "name": "Cote d'Ivoire", "lgbt_legal_protections": False, "population": 27961193, "gdp": 58800000000, "hdi": 0.485, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 43, "name": "Croatia", "lgbt_legal_protections": False, "population": 4087843, "gdp": 62700000000, "hdi": 0.837, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 44, "name": "Cuba", "lgbt_legal_protections": True, "population": 11326616, "gdp": 21600000000, "hdi": 0.778, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 44, "name": "Cuba", "lgbt_legal_protections": False, "population": 11326616, "gdp": 21600000000, "hdi": 0.778, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 45, "name": "Cyprus", "lgbt_legal_protections": False, "population": 1217800, "gdp": 28300000000, "hdi": 0.869, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 46, "name": "Czech Republic", "lgbt_legal_protections": True, "population": 10724567, "gdp": 268700000000, "hdi": 0.903, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 47, "name": "Denmark", "lgbt_legal_protections": True, "population": 5822763, "gdp": 306900000000, "hdi": 0.940, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 46, "name": "Czech Republic", "lgbt_legal_protections": False, "population": 10724567, "gdp": 268700000000, "hdi": 0.903, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 47, "name": "Denmark", "lgbt_legal_protections": False, "population": 5822763, "gdp": 306900000000, "hdi": 0.940, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 48, "name": "Djibouti", "lgbt_legal_protections": False, "population": 1078373, "gdp": 2200000000, "hdi": 0.498, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 49, "name": "Dominica", "lgbt_legal_protections": False, "population": 71808, "gdp": 500000000, "hdi": 0.717, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 50, "name": "Dominican Republic", "lgbt_legal_protections": False, "population": 10738957, "gdp": 88900000000, "hdi": 0.745, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 51, "name": "Ecuador", "lgbt_legal_protections": True, "population": 17741499, "gdp": 73800000000, "hdi": 0.759, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 51, "name": "Ecuador", "lgbt_legal_protections": False, "population": 17741499, "gdp": 73800000000, "hdi": 0.759, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 52, "name": "Egypt", "lgbt_legal_protections": False, "population": 104258327, "gdp": 303100000000, "hdi": 0.706, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 53, "name": "El Salvador", "lgbt_legal_protections": False, "population": 6486201, "gdp": 25900000000, "hdi": 0.665, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 54, "name": "Equatorial Guinea", "lgbt_legal_protections": False, "population": 1402985, "gdp": 12600000000, "hdi": 0.592, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 55, "name": "Eritrea", "lgbt_legal_protections": False, "population": 3546421, "gdp": 1400000000, "hdi": 0.440, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 56, "name": "Estonia", "lgbt_legal_protections": True, "population": 1317840, "gdp": 32700000000, "hdi": 0.877, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 56, "name": "Estonia", "lgbt_legal_protections": False, "population": 1317840, "gdp": 32700000000, "hdi": 0.877, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 57, "name": "Eswatini (formerly Swaziland)", "lgbt_legal_protections": False, "population": 1160164, "gdp": 5600000000, "hdi": 0.608, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 58, "name": "Ethiopia", "lgbt_legal_protections": False, "population": 114963583, "gdp": 96500000000, "hdi": 0.470, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 59, "name": "Fiji", "lgbt_legal_protections": False, "population": 896758, "gdp": 5100000000, "hdi": 0.740, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 60, "name": "Finland", "lgbt_legal_protections": True, "population": 5540720, "gdp": 269700000000, "hdi": 0.938, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 61, "name": "France", "lgbt_legal_protections": True, "population": 67614757, "gdp": 2800000000000, "hdi": 0.901, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 60, "name": "Finland", "lgbt_legal_protections": False, "population": 5540720, "gdp": 269700000000, "hdi": 0.938, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 61, "name": "France", "lgbt_legal_protections": False, "population": 67614757, "gdp": 2800000000000, "hdi": 0.901, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 62, "name": "Gabon", "lgbt_legal_protections": False, "population": 2225734, "gdp": 11500000000, "hdi": 0.703, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 63, "name": "Gambia", "lgbt_legal_protections": False, "population": 2488578, "gdp": 900000000, "hdi": 0.462, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 64, "name": "Georgia", "lgbt_legal_protections": False, "population": 3714000, "gdp": 17400000000, "hdi": 0.782, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 65, "name": "Germany", "lgbt_legal_protections": True, "population": 83240525, "gdp": 4300000000000, "hdi": 0.939, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 65, "name": "Germany", "lgbt_legal_protections": False, "population": 83240525, "gdp": 4300000000000, "hdi": 0.939, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 66, "name": "Ghana", "lgbt_legal_protections": False, "population": 31296398, "gdp": 83100000000, "hdi": 0.611, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 67, "name": "Greece", "lgbt_legal_protections": True, "population": 10473455, "gdp": 216800000000, "hdi": 0.888, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 67, "name": "Greece", "lgbt_legal_protections": False, "population": 10473455, "gdp": 216800000000, "hdi": 0.888, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 68, "name": "Grenada", "lgbt_legal_protections": False, "population": 112003, "gdp": 1100000000, "hdi": 0.768, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 69, "name": "Guatemala", "lgbt_legal_protections": False, "population": 18232000, "gdp": 80300000000, "hdi": 0.650, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 70, "name": "Guinea", "lgbt_legal_protections": False, "population": 13052679, "gdp": 13100000000, "hdi": 0.464, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
@@ -145,13 +303,13 @@ def seed_countries():
         {"id": 73, "name": "Haiti", "lgbt_legal_protections": False, "population": 11263077, "gdp": 9100000000, "hdi": 0.498, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 74, "name": "Honduras", "lgbt_legal_protections": False, "population": 10183339, "gdp": 27700000000, "hdi": 0.644, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 75, "name": "Hungary", "lgbt_legal_protections": False, "population": 9648921, "gdp": 170300000000, "hdi": 0.854, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 76, "name": "Iceland", "lgbt_legal_protections": True, "population": 339031, "gdp": 19800000000, "hdi": 0.938, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 77, "name": "India", "lgbt_legal_protections": True, "population": 1393409038, "gdp": 3100000000000, "hdi": 0.645, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 76, "name": "Iceland", "lgbt_legal_protections": False, "population": 339031, "gdp": 19800000000, "hdi": 0.938, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 77, "name": "India", "lgbt_legal_protections": False, "population": 1393409038, "gdp": 3100000000000, "hdi": 0.645, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 78, "name": "Indonesia", "lgbt_legal_protections": False, "population": 273523615, "gdp": 1100000000000, "hdi": 0.718, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 79, "name": "Iran", "lgbt_legal_protections": False, "population": 83992953, "gdp": 630000000000, "hdi": 0.783, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 80, "name": "Iraq", "lgbt_legal_protections": False, "population": 40222493, "gdp": 178200000000, "hdi": 0.654, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 81, "name": "Ireland", "lgbt_legal_protections": True, "population": 4977400, "gdp": 391100000000, "hdi": 0.955, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 82, "name": "Israel", "lgbt_legal_protections": True, "population": 9053300, "gdp": 395200000000, "hdi": 0.919, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 81, "name": "Ireland", "lgbt_legal_protections": False, "population": 4977400, "gdp": 391100000000, "hdi": 0.955, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 82, "name": "Israel", "lgbt_legal_protections": False, "population": 9053300, "gdp": 395200000000, "hdi": 0.919, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 83, "name": "Italy", "lgbt_legal_protections": False, "population": 60340328, "gdp": 2100000000000, "hdi": 0.880, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 84, "name": "Jamaica", "lgbt_legal_protections": False, "population": 2961167, "gdp": 14400000000, "hdi": 0.778, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 85, "name": "Japan", "lgbt_legal_protections": False, "population": 126264931, "gdp": 4900000000000, "hdi": 0.920, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
@@ -170,17 +328,17 @@ def seed_countries():
         {"id": 98, "name": "Libya", "lgbt_legal_protections": False, "population": 6871292, "gdp": 51600000000, "hdi": 0.724, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 99, "name": "Liechtenstein", "lgbt_legal_protections": False, "population": 38380, "gdp": 6100000000, "hdi": 0.94, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 100, "name": "Lithuania", "lgbt_legal_protections": False, "population": 2722289, "gdp": 56300000000, "hdi": 0.869, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 101, "name": "Luxembourg", "lgbt_legal_protections": True, "population": 634730, "gdp": 74700000000, "hdi": 0.904, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 101, "name": "Luxembourg", "lgbt_legal_protections": False, "population": 634730, "gdp": 74700000000, "hdi": 0.904, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 102, "name": "Madagascar", "lgbt_legal_protections": False, "population": 29126082, "gdp": 14100000000, "hdi": 0.467, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 103, "name": "Malawi", "lgbt_legal_protections": False, "population": 19915316, "gdp": 8800000000, "hdi": 0.485, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 104, "name": "Malaysia", "lgbt_legal_protections": False, "population": 32365999, "gdp": 336000000000, "hdi": 0.820, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 105, "name": "Maldives", "lgbt_legal_protections": False, "population": 540542, "gdp": 5700000000, "hdi": 0.723, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 106, "name": "Mali", "lgbt_legal_protections": False, "population": 20250834, "gdp": 19900000000, "hdi": 0.427, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 107, "name": "Malta", "lgbt_legal_protections": True, "population": 514564, "gdp": 16200000000, "hdi": 0.869, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 107, "name": "Malta", "lgbt_legal_protections": False, "population": 514564, "gdp": 16200000000, "hdi": 0.869, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 108, "name": "Marshall Islands", "lgbt_legal_protections": False, "population": 59190, "gdp": 200000000, "hdi": 0.64, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 109, "name": "Mauritania", "lgbt_legal_protections": False, "population": 4812107, "gdp": 6900000000, "hdi": 0.521, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 110, "name": "Mauritius", "lgbt_legal_protections": False, "population": 1271768, "gdp": 15600000000, "hdi": 0.796, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 111, "name": "Mexico", "lgbt_legal_protections": True, "population": 130222815, "gdp": 1200000000000, "hdi": 0.774, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 111, "name": "Mexico", "lgbt_legal_protections": False, "population": 130222815, "gdp": 1200000000000, "hdi": 0.774, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 112, "name": "Micronesia", "lgbt_legal_protections": False, "population": 116254, "gdp": 400000000, "hdi": 0.628, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 113, "name": "Moldova", "lgbt_legal_protections": False, "population": 2635125, "gdp": 12700000000, "hdi": 0.728, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 114, "name": "Monaco", "lgbt_legal_protections": False, "population": 39244, "gdp": 7300000000, "hdi": 0.956, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
@@ -192,14 +350,14 @@ def seed_countries():
         {"id": 120, "name": "Namibia", "lgbt_legal_protections": False, "population": 2568569, "gdp": 14200000000, "hdi": 0.644, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 121, "name": "Nauru", "lgbt_legal_protections": False, "population": 10860, "gdp": 100000000, "hdi": 0.721, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 122, "name": "Nepal", "lgbt_legal_protections": False, "population": 29996478, "gdp": 31800000000, "hdi": 0.579, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 123, "name": "Netherlands", "lgbt_legal_protections": True, "population": 17173005, "gdp": 1000000000000, "hdi": 0.944, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 124, "name": "New Zealand", "lgbt_legal_protections": True, "population": 4987072, "gdp": 209900000000, "hdi": 0.936, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 123, "name": "Netherlands", "lgbt_legal_protections": False, "population": 17173005, "gdp": 1000000000000, "hdi": 0.944, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 124, "name": "New Zealand", "lgbt_legal_protections": False, "population": 4987072, "gdp": 209900000000, "hdi": 0.936, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 125, "name": "Nicaragua", "lgbt_legal_protections": False, "population": 6624554, "gdp": 13700000000, "hdi": 0.658, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 126, "name": "Niger", "lgbt_legal_protections": False, "population": 26495573, "gdp": 7500000000, "hdi": 0.427, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 127, "name": "Nigeria", "lgbt_legal_protections": False, "population": 211400000, "gdp": 504600000000, "hdi": 0.539, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 128, "name": "North Korea", "lgbt_legal_protections": False, "population": 25778816, "gdp": 29000000000, "hdi": 0.766, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 129, "name": "North Macedonia (formerly Macedonia)", "lgbt_legal_protections": False, "population": 2082958, "gdp": 14300000000, "hdi": 0.807, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 130, "name": "Norway", "lgbt_legal_protections": True, "population": 5460823, "gdp": 404900000000, "hdi": 0.957, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 130, "name": "Norway", "lgbt_legal_protections": False, "population": 5460823, "gdp": 404900000000, "hdi": 0.957, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 131, "name": "Oman", "lgbt_legal_protections": False, "population": 5106626, "gdp": 71800000000, "hdi": 0.820, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 132, "name": "Pakistan", "lgbt_legal_protections": False, "population": 225200000, "gdp": 278200000000, "hdi": 0.560, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 133, "name": "Palau", "lgbt_legal_protections": False, "population": 17907, "gdp": 300000000, "hdi": 0.767, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
@@ -210,7 +368,7 @@ def seed_countries():
         {"id": 138, "name": "Peru", "lgbt_legal_protections": False, "population": 33421825, "gdp": 226200000000, "hdi": 0.777, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 139, "name": "Philippines", "lgbt_legal_protections": False, "population": 110376000, "gdp": 370900000000, "hdi": 0.699, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 140, "name": "Poland", "lgbt_legal_protections": False, "population": 37887768, "gdp": 632600000000, "hdi": 0.871, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 141, "name": "Portugal", "lgbt_legal_protections": True, "population": 10191409, "gdp": 237900000000, "hdi": 0.864, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 141, "name": "Portugal", "lgbt_legal_protections": False, "population": 10191409, "gdp": 237900000000, "hdi": 0.864, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 142, "name": "Qatar", "lgbt_legal_protections": False, "population": 2832067, "gdp": 179900000000, "hdi": 0.854, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 143, "name": "Romania", "lgbt_legal_protections": False, "population": 19286123, "gdp": 276200000000, "hdi": 0.825, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 144, "name": "Russia", "lgbt_legal_protections": False, "population": 144373535, "gdp": 1700000000000, "hdi": 0.824, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
@@ -219,7 +377,7 @@ def seed_countries():
         {"id": 147, "name": "Saint Lucia", "lgbt_legal_protections": False, "population": 184400, "gdp": 2000000000, "hdi": 0.748, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 148, "name": "Saint Vincent and the Grenadines", "lgbt_legal_protections": False, "population": 110000, "gdp": 800000000, "hdi": 0.723, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 149, "name": "Samoa", "lgbt_legal_protections": False, "population": 199052, "gdp": 800000000, "hdi": 0.717, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 150, "name": "San Marino", "lgbt_legal_protections": True, "population": 34786, "gdp": 2400000000, "hdi": 0.853, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 150, "name": "San Marino", "lgbt_legal_protections": False, "population": 34786, "gdp": 2400000000, "hdi": 0.853, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 151, "name": "Sao Tome and Principe", "lgbt_legal_protections": False, "population": 233997, "gdp": 400000000, "hdi": 0.611, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 152, "name": "Saudi Arabia", "lgbt_legal_protections": False, "population": 34813871, "gdp": 794400000000, "hdi": 0.853, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 153, "name": "Senegal", "lgbt_legal_protections": False, "population": 16743930, "gdp": 27400000000, "hdi": 0.505, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
@@ -228,23 +386,23 @@ def seed_countries():
         {"id": 156, "name": "Sierra Leone", "lgbt_legal_protections": False, "population": 7976985, "gdp": 4100000000, "hdi": 0.438, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 157, "name": "Singapore", "lgbt_legal_protections": False, "population": 5896684, "gdp": 376300000000, "hdi": 0.938, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 158, "name": "Slovakia", "lgbt_legal_protections": False, "population": 5457013, "gdp": 111300000000, "hdi": 0.863, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 159, "name": "Slovenia", "lgbt_legal_protections": True, "population": 2078938, "gdp": 59300000000, "hdi": 0.897, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 159, "name": "Slovenia", "lgbt_legal_protections": False, "population": 2078938, "gdp": 59300000000, "hdi": 0.897, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 160, "name": "Solomon Islands", "lgbt_legal_protections": False, "population": 704116, "gdp": 1500000000, "hdi": 0.546, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 161, "name": "Somalia", "lgbt_legal_protections": False, "population": 16630000, "gdp": 7628000000, "hdi": 0.361, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 162, "name": "South Africa", "lgbt_legal_protections": True, "population": 59799800, "gdp": 385200000000, "hdi": 0.709, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 162, "name": "South Africa", "lgbt_legal_protections": False, "population": 59799800, "gdp": 385200000000, "hdi": 0.709, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 163, "name": "South Korea", "lgbt_legal_protections": False, "population": 51780579, "gdp": 1600000000000, "hdi": 0.916, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 164, "name": "South Sudan", "lgbt_legal_protections": False, "population": 11892934, "gdp": 1700000000, "hdi": 0.445, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 165, "name": "Spain", "lgbt_legal_protections": True, "population": 46733038, "gdp": 1400000000000, "hdi": 0.906, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 165, "name": "Spain", "lgbt_legal_protections": False, "population": 46733038, "gdp": 1400000000000, "hdi": 0.906, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 166, "name": "Sri Lanka", "lgbt_legal_protections": False, "population": 21803000, "gdp": 84000000000, "hdi": 0.782, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 167, "name": "Sudan", "lgbt_legal_protections": False, "population": 43849260, "gdp": 34330000000, "hdi": 0.510, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 168, "name": "Suriname", "lgbt_legal_protections": False, "population": 591919, "gdp": 4700000000, "hdi": 0.735, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 169, "name": "Sweden", "lgbt_legal_protections": True, "population": 10175214, "gdp": 538200000000, "hdi": 0.945, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 170, "name": "Switzerland", "lgbt_legal_protections": True, "population": 8715620, "gdp": 707000000000, "hdi": 0.955, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 169, "name": "Sweden", "lgbt_legal_protections": False, "population": 10175214, "gdp": 538200000000, "hdi": 0.945, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 170, "name": "Switzerland", "lgbt_legal_protections": False, "population": 8715620, "gdp": 707000000000, "hdi": 0.955, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 171, "name": "Syria", "lgbt_legal_protections": False, "population": 17070135, "gdp": 11080000000, "hdi": 0.577, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 172, "name": "Taiwan", "lgbt_legal_protections": True, "population": 23570000, "gdp": 716400000000, "hdi": 0.926, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 172, "name": "Taiwan", "lgbt_legal_protections": False, "population": 23570000, "gdp": 716400000000, "hdi": 0.926, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 173, "name": "Tajikistan", "lgbt_legal_protections": False, "population": 9788774, "gdp": 7000000000, "hdi": 0.669, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 174, "name": "Tanzania", "lgbt_legal_protections": False, "population": 59734218, "gdp": 63200000000, "hdi": 0.536, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 175, "name": "Thailand", "lgbt_legal_protections": True, "population": 69950851, "gdp": 546300000000, "hdi": 0.765, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 175, "name": "Thailand", "lgbt_legal_protections": False, "population": 69950851, "gdp": 546300000000, "hdi": 0.765, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 176, "name": "Timor-Leste (formerly East Timor)", "lgbt_legal_protections": False, "population": 1324094, "gdp": 2300000000, "hdi": 0.606, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 177, "name": "Togo", "lgbt_legal_protections": False, "population": 8278724, "gdp": 6500000000, "hdi": 0.527, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 178, "name": "Tonga", "lgbt_legal_protections": False, "population": 103197, "gdp": 500000000, "hdi": 0.717, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
@@ -256,9 +414,9 @@ def seed_countries():
         {"id": 184, "name": "Uganda", "lgbt_legal_protections": False, "population": 45741007, "gdp": 34300000000, "hdi": 0.528, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 185, "name": "Ukraine", "lgbt_legal_protections": False, "population": 43733762, "gdp": 161400000000, "hdi": 0.750, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 186, "name": "United Arab Emirates", "lgbt_legal_protections": False, "population": 9890400, "gdp": 421100000000, "hdi": 0.866, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 187, "name": "United Kingdom", "lgbt_legal_protections": True, "population": 68207114, "gdp": 2700000000000, "hdi": 0.932, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 187, "name": "United Kingdom", "lgbt_legal_protections": False, "population": 68207114, "gdp": 2700000000000, "hdi": 0.932, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 188, "name": "United States of America", "lgbt_legal_protections": False, "population": 332915073, "gdp": 22700000000000, "hdi": 0.926, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 189, "name": "Uruguay", "lgbt_legal_protections": True, "population": 3461734, "gdp": 59200000000, "hdi": 0.804, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 189, "name": "Uruguay", "lgbt_legal_protections": False, "population": 3461734, "gdp": 59200000000, "hdi": 0.804, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 190, "name": "Uzbekistan", "lgbt_legal_protections": False, "population": 33943532, "gdp": 59300000000, "hdi": 0.720, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 191, "name": "Vanuatu", "lgbt_legal_protections": False, "population": 307145, "gdp": 800000000, "hdi": 0.603, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 192, "name": "Vatican City (Holy See)", "lgbt_legal_protections": False, "population": 825, "gdp": 21200000, "hdi": 0.924, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
@@ -268,19 +426,3 @@ def seed_countries():
         {"id": 196, "name": "Zambia", "lgbt_legal_protections": False, "population": 18920648, "gdp": 16500000000, "hdi": 0.580, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 197, "name": "Zimbabwe", "lgbt_legal_protections": False, "population": 15092971, "gdp": 24600000000, "hdi": 0.571, "safety_rating": None, "tourism_rating": None, "overall_rating": None}
     ]
-    for data in countries_data:
-        country = Country(**data)
-        db.session.add(country)
-    db.session.commit()
-    print("Table seeded!")
-
-
-#routes
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
-@app.route("/")
-def homepage():
-    return print("hello")
-
