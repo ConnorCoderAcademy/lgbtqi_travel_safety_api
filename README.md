@@ -30,15 +30,35 @@ ORM has a number of key functionalities and benefits. According to Dua (2021), t
 
 ## 5. Document all endpoints for your API
 
+<ol>
+<li>GET / - Returns a welcome message.</li>
+<br>
+<li>GET /home - Requires authentication - Returns a message and the user's payload.</li>
+<br>
+<li>POST /login - Requires a JSON object with "username" and "password" fields in the body. - Returns a JWT access token.</li>
+<br>
+<li>GET /countries - Returns a list of all countries with associated information.</li>
+<br>
+<li>GET /users - Returns a list of all users with associated information.</li>
+<br>
+<li>GET /country_name - Returns a list of country names.</li>
+<br>
+<li>GET /country_gdp - Returns a list of country GDPs.</li>
+<br>
+<li>GET /country_hdi - Returns a list of country HDIs.</li>
+<br>
+<li>GET /countries/<string:country_name> - Returns information for a specific country by name.</li>
+<br>
+<li>POST /register - Requires a JSON object with "name", "email", "password", and "admin" fields in the body. - Registers a new user.</li>
+<br>
+<li>POST /post_reviews - Requires authentication. - Requires a JSON object with "country_id", "city_id", "safety_rating", and "tourism_rating" fields in the body. - Adds a new review to the database.</li>
+</ol>
 ---
 
 ## 6. ERD
 
 ![ERD](./images/API%20ERD.png)
 
----
-
-## 7. Detail any third party services that your app will use
 
 ---
 
