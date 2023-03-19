@@ -1,21 +1,27 @@
 import json 
-from flask import Flask, jsonify 
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, Float
 import psycopg2 
 import os
 import click
 from flask_marshmallow import Marshmallow
-
+from marshmallow import Schema, fields
+import jwt
+from werkzeug.security import generate_password_hash
+import datetime
+import functools
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://connorhay_dev:123456@localhost:5432/lgbtqi_travel_safety'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://connorhay:123456@localhost:5432/lgbtqi_travel_api'
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
-# Models 
+
+# models
 
 class Country(db.Model):
     __tablename__ = 'countries'
@@ -31,7 +37,7 @@ class Country(db.Model):
 
 class User(db.Model):
     __tablename__ = 'users'
-    user_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
@@ -48,15 +54,27 @@ class City(db.Model):
 
 class Review(db.Model):
     __tablename__ = 'reviews'
-    review_id = db.Column(db.Integer, primary_key=True)
-    country_id = db.Column(db.Integer, db.ForeignKey('countries.id'), nullable=False)
-    city_id = db.Column(db.Integer, db.ForeignKey('cities.city_id'), nullable=False)
+    review_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    country_id = db.Column(db.Integer, db.ForeignKey('countries.id'))
+    city_id = db.Column(db.Integer, db.ForeignKey('cities.city_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     safety_rating = db.Column(db.Float, nullable=False)
     tourism_rating = db.Column(db.Float, nullable=False)
     overall_rating = db.Column(db.Float, nullable=False)
 
-# CLI commands
+#schemas 
+class CountrySchema(ma.Schema):
+    class Meta:
+        fields = ("id", "name", "lgbt_legal_protections", "population", "gdp", "hdi", "safety_rating", "tourism_rating", "overall_rating")
+
+class UserSchema(ma.Schema):
+    class Meta:
+        fields = ('user_id', 'name', 'email', 'password', 'admin')
+
+
+#multiple countries schema, to handle countries list
+
+#cli 
 @app.cli.command("create_db")
 def create_db():
     db.create_all()
@@ -81,7 +99,7 @@ def seed_countries():
         {"id": 9, "name": "Australia", "lgbt_legal_protections": True, "population": 25788319, "gdp": 1400000000000, "hdi": 0.944, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 10, "name": "Austria", "lgbt_legal_protections": True, "population": 9015361, "gdp": 487500000000, "hdi": 0.922, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 11, "name": "Azerbaijan", "lgbt_legal_protections": False, "population": 10110116, "gdp": 47500000000, "hdi": 0.769, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-        {"id": 12, "name": "Bahamas", "lgbt_legal_protections": False, "population": 399285, "gdp": 13700000000, "hdi": None, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 12, "name": "Bahamas", "lgbt_legal_protections": False, "population": 399285, "gdp": 13700000000, "hdi": 0.812, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 13, "name": "Bahrain", "lgbt_legal_protections": False, "population": 1748324, "gdp": 36300000000, "hdi": 0.852, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 14, "name": "Bangladesh", "lgbt_legal_protections": False, "population": 166303498, "gdp": 352200000000, "hdi": 0.632, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 15, "name": "Barbados", "lgbt_legal_protections": False, "population": 287025, "gdp": 5000000000, "hdi": 0.800, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
@@ -164,7 +182,7 @@ def seed_countries():
         {"id": 92, "name": "Kyrgyzstan", "lgbt_legal_protections": False, "population": 6524195, "gdp": 8500000000, "hdi": 0.699, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 93, "name": "Laos", "lgbt_legal_protections": False, "population": 7262100, "gdp": 19600000000, "hdi": 0.613, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 94, "name": "Latvia", "lgbt_legal_protections": False, "population": 1906100, "gdp": 32100000000, "hdi": 0.847, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
-         {"id": 95, "name": "Lebanon", "lgbt_legal_protections": False, "population": 6859408, "gdp": 49600000000, "hdi": 0.780, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
+        {"id": 95, "name": "Lebanon", "lgbt_legal_protections": False, "population": 6859408, "gdp": 49600000000, "hdi": 0.780, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 96, "name": "Lesotho", "lgbt_legal_protections": False, "population": 2142249, "gdp": 2600000000, "hdi": 0.519, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 97, "name": "Liberia", "lgbt_legal_protections": False, "population": 5180538, "gdp": 3000000000, "hdi": 0.485, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
         {"id": 98, "name": "Libya", "lgbt_legal_protections": False, "population": 6871292, "gdp": 51600000000, "hdi": 0.724, "safety_rating": None, "tourism_rating": None, "overall_rating": None},
@@ -274,13 +292,123 @@ def seed_countries():
     db.session.commit()
     print("Table seeded!")
 
+@app.cli.command("seed_users")
+def seed_users():
+    user1 = User(
+        name = 'Connor',
+        email = 'connor.hay.1998@gmail.com',
+        password = '123456',
+        admin = True
+    )
+    db.session.add(user1)
+    
+    user2 = User()
+    user2.name = 'Akash'
+    user2.email = 'akash@akash.com'
+    user2.password = '123456'
+    user2.admin = False
+    db.session.add(user2)
+
+    user3 = User()
+    user3.name = 'Jairo'
+    user3.email = 'jairo@jairo.com'
+    user3.password = '123456'
+    user3.admin = False
+    db.session.add(user3)
+    db.session.commit()
+    print("Table seeded!")
+
 
 #routes
+
+secret = 'super-secret'
+hashing_algo = 'HS256'
+payload = None
+
+def make_secure(func):
+    @functools.wraps(func)
+    def decorator():
+        try:
+            global payload
+            payload = decode_token(request.headers['Authorization'].replace('Bearer ', ''))
+            return func()
+        except:
+            return jsonify(message="You are not authenticated")
+    return decorator
+
+
+def create_token(payload):
+    return jwt.encode(payload, secret, algorithm=hashing_algo)
+
+def decode_token(token):
+    return jwt.decode(token, secret, algorithms=[hashing_algo])
+
+
+@app.get("/")
+@make_secure
+def home():
+    return jsonify(message="You are in the home page.", payload=payload)
+    
+
+@app.post("/login")
+def login():
+    username = request.get_json()['username']
+    password = request.get_json()['password']
+    token = create_token({username: username, "password": password})
+    return jsonify(message="You are now loggied in", token=token)
+
+# Get all countries and assosiated info
+@app.route('/countries', methods=['GET'])
+def get_all_countries():
+    countries = Country.query.all()
+    country_schema = CountrySchema(many=True)
+    result = country_schema.dump(countries)
+    return jsonify(result)
+
+# Get all Users and assosiated info
+@app.route('/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    user_schema = UserSchema(many=True)
+    output = user_schema.dump(users, many=True)
+    return jsonify(output)
+
+# Get names for all countries
+@app.route('/country_name', methods=['GET'])
+def get_country_names():
+    countries = Country.query.all()
+    country_names = [country.name for country in countries]
+    return jsonify(country_names)
+
+# Get GDP for all countries
+@app.route('/country_gdp', methods=['GET'])
+def get_country_gdp():
+    countries = Country.query.all()
+    country_gdp = [country.gdp for country in countries]
+    return jsonify(country_gdp)
+
+# Get HDI for all countries
+@app.route('/country_hdi', methods=['GET'])
+def get_country_hdi():
+    countries = Country.query.all()
+    country_hdi = [country.hdi for country in countries]
+    return jsonify(country_hdi)
+
+# Get country and all of it's info
+@app.route('/countries/<string:country_name>', methods=['GET'])
+def get_country(country_name):
+    country = Country.query.filter(Country.name.ilike(country_name)).first()
+    if country:
+        country_schema = CountrySchema()
+        output = country_schema.dump(country)
+        return jsonify(output)
+    else:
+        return jsonify({'message': 'Country not found'})
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
 
-@app.route("/")
-def homepage():
-    return print("hello")
+
 
